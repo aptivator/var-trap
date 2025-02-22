@@ -89,27 +89,6 @@ footprint as illustrated below.
 Before a trap object with trapper properties can be used, an appropriate trap
 definition must be imported or specified.
 
-*trap-definition-file.js*
-```javascript
-import {addTrapDefinitions} from 'var-trap';
-
-addTrapDefinitions('observable', {
-  storeFactory: () => new Set(),
-  valueAdder(subscription, subscriptions) {
-    subscriptions.add(subscription);
-  },
-  methods: {
-    unsubscribe(subscriptions) => {
-      subscriptions.forEach((subscription) => {
-        subscription.unsubscribe();
-      });
-
-      subscriptions.clear();
-    }
-  }
-});
-```
-
 *some-angular-component-file.js*
 ```javascript
 import {createTrapObject} from 'var-trap';
@@ -181,7 +160,7 @@ definition.  `storeFactory()` should return an instance of a collection.
 `valueAdder()` receives a value and a collection and then adds the former
 to the latter.
 
-The library will error out if one of these is not provided.
+The library will error out if any one of these is not provided.
 
 ```javascript
 import {addTrapDefinitions} from 'var-trap';
@@ -212,7 +191,7 @@ addTrapDefinitions('callbacks', {
 });
 ```
 
-A method, besides a collection, can also receive parameters.
+A method, in addition to a collection, can also receive parameters.
 
 ```javascript
 addTrapDefinitions('array', {
@@ -234,7 +213,8 @@ By default, all of the `methods` are chainable.  If a definition includes
 methods `sum()`, `print()`, and `clear()`, then they can be called one
 after another: `trap.a.sum().print().clear()`.
 
-`var-trap` allows declaring methods that will return their value.
+`var-trap` does allow specifying methods that will return their value instead
+of an instance from which they are called.
 
 ```javascript
 addTrapDefinitions('numbers', {
@@ -242,7 +222,11 @@ addTrapDefinitions('numbers', {
   valueAdder: (number, numbers) => numbers.push(number),
   methods: {
     sum: {
-      method: (numbers) => numbers.reduce((sum, number) => sum + number),
+      method(numbers) {
+        return numbers.reduce((sum, number) => {
+          return sum + number;
+        });
+      },
       configs: {returnValue: true}
     }
   }
@@ -303,8 +287,7 @@ import {createTrapObject} from 'var-trap';
 let trap = createTrapObject({a: 'array', c: 'callbacks'});
 ```
 
-A trap object can be created as is with traps being added later.  This
-use case is unlikely.
+A trap object can be created as is for the purpose of traps being added later.
 
 *trap-objects.js*
 ```javascript
@@ -360,8 +343,7 @@ console.log(trap.a.store); // [1, 2, 3]
 <a name="invoking-methods-on-a-trap"></a>
 #### Invoking Methods on a Trap
 
-Once values' gathering via a trap is complete, operating on these can be
-done directly.
+Operating on the gathered values can be done directly.
 
 ```javascript
 let trap = createTrapObject({c: 'callbacks'});
@@ -409,7 +391,7 @@ trap.a.print(true); // 1, 2
 #### Deleting a Trap
 
 A trap can be removed using the `delete` operator or the trap's 
-default `delete()` method.  The advantage of using `delete()` is
+default `delete()` method.  The advantage of using the method is
 an option of executing `delete()` at the end of a methods chain.
 
 ```javascript
