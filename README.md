@@ -445,7 +445,7 @@ deleteTrapDefinitions('array', 'callbacks');
 in one of its testing sections to scoop up unsubscription functions from
 `subscribe()` calls and then execute and clear the unsubscriptions at the end
 of each test.  Here is that testing [file](https://github.com/aptivator/easy-data-state/blob/master/test/functionality/subscribe.test.js).  Use of `var-trap` reduced the amount of
-that testing code from 202 to 178 lines (about 12 percent).
+the testing code from 202 to 178 lines (about 12 percent).
 
 <a name="development"></a>
 ## Development 
