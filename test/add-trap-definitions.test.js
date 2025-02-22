@@ -47,7 +47,7 @@ describe('addTrapDefinitions()', () => {
         two: {storeFactory() {}, valueAdder() {}}
       };
       addTrapDefinitions(definitions);
-      expect(Object.keys(trapDefinitions).sort()).to.eql(['one', 'two']);
+      expect(Object.keys(trapDefinitions).sort()).to.eql(Object.keys(definitions).sort());
     });
 
     it('creates a "blank" methods class', () => {

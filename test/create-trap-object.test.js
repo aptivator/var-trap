@@ -9,13 +9,17 @@ describe('createTrapObject()', () => {
   describe('assertions', () => {
     it('takes an object of trap name/trap definition name pairs', () => {
       let error = `trap(s) specification should be an object of trap name and trap definition name pairs`;
-      expect(() => createTrapObject('not-object')).to.throw(error);
-    });
+      let funcs = [
+        () => createTrapObject('not-object'),
+        () => {
+          let trap = createTrapObject();
+          trap.addTraps('not-object')
+        }
+      ];
 
-    it('takes an object of trap name/trap definition name pairs', () => {
-      let error = `trap(s) specification should be an object of trap name and trap definition name pairs`;
-      let trap = createTrapObject();
-      expect(() => trap.addTraps('not-object')).to.throw(error);
+      for(let func of funcs) {
+        expect(func).to.throw(error);
+      }
     });
 
     it('alerts if a trap name is a reserved keyword', () => {
@@ -43,14 +47,14 @@ describe('createTrapObject()', () => {
       expect(() => trap.addTraps(trapConfigs)).to.throw(error);
     });
 
-    it('termintates when one of the trap reserved properties is attempted to be deleted', () => {
+    it('terminates when one of the trap reserved properties is attempted to be deleted', () => {
       let trapDefinitionName = 'name';
       let trapDefinition = {storeFactory() {}, valueAdder() {}};
       addTrapDefinitions(trapDefinitionName, trapDefinition);
 
       trapReservedKeywords.forEach((reservedTrapKeyword) => {
         let trapName = 'a';
-        let error = `'${reservedTrapKeyword}' is a reserved and cannot be deleted`;
+        let error = `'${reservedTrapKeyword}' is a reserved trap property and cannot be deleted`;
         let trapConfigs = {[trapName]: trapDefinitionName};
         let trap = createTrapObject(trapConfigs);
         expect(() => delete trap[reservedTrapKeyword]).to.throw(error);
@@ -73,7 +77,7 @@ describe('createTrapObject()', () => {
       let trapDefinition = {storeFactory() {}, valueAdder() {}};
       addTrapDefinitions(trapDefinitionName, trapDefinition);
       let trap = createTrapObject({a: trapDefinitionName});
-      expect(trap.a).to.be.an('object');
+      expect(trap.a).to.be.an.instanceof(trapDefinition.MethodsClass);
     });
 
     it('adds delete() method to a methods class instance', () => {
@@ -84,7 +88,7 @@ describe('createTrapObject()', () => {
       expect(trap.a.delete).to.be.a('function');
     });
 
-    it('includes trap definition methods in the methods class prototype', () => {
+    it('includes trap definition methods on the methods class prototype', () => {
       let trapDefinitionName = 'name';
       let methods = {one() {}, two() {}};
       let trapDefinition = {storeFactory() {}, valueAdder() {}, methods};
@@ -93,7 +97,7 @@ describe('createTrapObject()', () => {
       expect(Object.keys(trap.a.__proto__).sort()).to.eql(Object.keys(methods).sort());
     });
 
-    it('automatically passes the store to trap definition methods', () => {
+    it('automatically passes a store to trap definition methods', () => {
       let trapDefinitionName = 'array';
       let methods = {
         clear(store) {
@@ -124,7 +128,7 @@ describe('createTrapObject()', () => {
         clear(store) {
           store.slice(0);
         },
-        add1(store, addition) {
+        add(store, addition) {
           store.forEach((value, index, store) => {
             store[index] = value + addition;
           });
@@ -139,7 +143,7 @@ describe('createTrapObject()', () => {
       let trap = createTrapObject({a: 'array'});
       trap.a = 1;
       trap.a = 1;
-      trap.a.add1(20);
+      trap.a.add(20);
       expect(trap.a.store).to.eql([21, 21]);
     });
 

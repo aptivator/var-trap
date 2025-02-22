@@ -113,7 +113,7 @@ export function createTrapObject(trapConfigs) {
   return new Proxy(trap, {
     deleteProperty(trap, trapName) {
       if(trapReservedKeywords.has(trapName)) {
-        error(`'${trapName}' is a reserved and cannot be deleted`);
+        error(`'${trapName}' is a reserved trap property and cannot be deleted`);
       }
     
       if(Object.hasOwn(trap, trapName)) {

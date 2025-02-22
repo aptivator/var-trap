@@ -17,10 +17,11 @@ describe('deleteTrapDefinitions()', () => {
         one: {storeFactory() {}, valueAdder() {}}, 
         two: {storeFactory() {}, valueAdder() {}}
       };
+      let definitionNames = Object.keys(definitions).sort();
   
       addTrapDefinitions(definitions);
-      expect(Object.keys(trapDefinitions).sort()).to.eql(Object.keys(definitions).sort());
-      deleteTrapDefinitions(...Object.keys(definitions));
+      expect(Object.keys(trapDefinitions).sort()).to.eql(definitionNames);
+      deleteTrapDefinitions(...definitionNames);
       expect(trapDefinitions).to.eql({});
     });
   });
