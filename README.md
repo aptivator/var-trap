@@ -449,8 +449,7 @@ the testing code from 202 to 178 lines (about 12 percent).
 
 [promise-keeper](https://github.com/aptivator/promise-keeper) uses `var-trap`
 also in one of its testing sections to capture instantiated promises without
-having to assign these to variables.  Here is that [example](https://github.com/aptivator/promise-keeper/blob/master/test/static-methods.test.js).  Using `var-trap` made the tests a little
-bit simpler.
+having to assign these to variables.  Here is that [example](https://github.com/aptivator/promise-keeper/blob/master/test/static-methods.test.js).
 
 <a name="development"></a>
 ## Development 
