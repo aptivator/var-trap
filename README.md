@@ -22,7 +22,7 @@
     * [Deleting a Trap](#deleting-a-trap)
     * [Adding a Trap to an Existing Trap Object](#adding-a-trap-to-an-existing-trap-object)
   * [Deleting a Trap Definition](#deleting-a-trap-definition)
-  * [Example](#example)
+  * [Examples](#examples)
 * [Development](#development)
   * [Development Setup](#development-setup)
   * [Contributing Changes](#contributing-changes)
@@ -438,14 +438,19 @@ let {deleteTrapDefinitions} from 'var-trap';
 deleteTrapDefinitions('array', 'callbacks');
 ```
 
-<a name="example"></a>
-### Example
+<a name="examples"></a>
+### Examples
 
 [easy-data-state](https://github.com/aptivator/easy-data-state) uses `var-trap`
 in one of its testing sections to scoop up unsubscription functions from
 `subscribe()` calls and then execute and clear the unsubscriptions at the end
 of each test.  Here is that testing [file](https://github.com/aptivator/easy-data-state/blob/master/test/functionality/subscribe.test.js).  Use of `var-trap` reduced the amount of
 the testing code from 202 to 178 lines (about 12 percent).
+
+[promise-keeper](https://github.com/aptivator/promise-keeper) uses `var-trap`
+also in one of its testing sections to capture instantiated promises without
+having to assign these to variables.  Here is that [example](https://github.com/aptivator/promise-keeper/blob/master/test/static-methods.test.js).  Using `var-trap` made the tests a little
+bit simpler.
 
 <a name="development"></a>
 ## Development 
